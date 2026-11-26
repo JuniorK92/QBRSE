@@ -1,0 +1,13 @@
+[] execVM "00_init_vars.sqf";
+[] execVM "ai_agression.sqf";
+waitUntil { !isNil "BRSE_AggroLoop" };
+[] spawn BRSE_AggroLoop;
+[] execVM "10_spawn_funcs_and_lists.sqf";
+[] execVM "20_ban_markers.sqf";
+[] execVM "30_spawn_triggers.sqf";
+[] execVM "40_last_point_runner.sqf";
+[] execVM "50_notify_generator.sqf";
+[] execVM "60_graphics_creator.sqf";
+[] execVM "funcSetup.sqf";
+[] execVM "noobGift.sqf";
+[] execVM "drawMarkers.sqf";
