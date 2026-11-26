@@ -1,8 +1,9 @@
 ﻿params [["_myhuman", objNull]];
+// Requiere una unidad válida y que las listas de equipo ya estén inicializadas.
 if (isNull _myhuman) exitWith { diag_log "Error: _myhuman is null in noobGift.sqf"; };
 if (isNil "userHelmetsListForSpawn") exitWith { diag_log "Error: userHelmetsListForSpawn is undefined in noobGift.sqf"; };
 
-
+// Asigna al azar casco y mochila de las listas creadas al iniciar la misión.
 _helmSize = count userHelmetsListForSpawn;
 _helmR = floor (random _helmSize);
 _my_helm = configName (userHelmetsListForSpawn select _helmR);
@@ -19,6 +20,7 @@ if (!isNil "_mybackpack" && {_mybackpack != ""}) then {
 };
 
 
+// El chaleco se asigna aquí excepto para la apariencia de nivel 4, que lo gestiona su regalo.
 if (SkinData != 4) then {
     _vestSize = count userVestListForSpawn;
     _vestR = floor random(_vestSize);
@@ -29,6 +31,7 @@ if (SkinData != 4) then {
 };
 
 
+// Añade el objeto de recompensa asociado al nivel de apariencia seleccionado.
 generateGifts = {
     _gift = _this select 0;
     _itemR = 0;
@@ -41,6 +44,7 @@ generateGifts = {
     };
 };
 
+// Aplica apariencia y recompensa cosmética según el nivel elegido en la configuración.
 switch (SkinData) do { 
     case 0: {};
     case 1: {player addUniform (expiriencedSkin select 0); player addGoggles (expiriencedSkin select 1); player addHeadgear (expiriencedSkin select 2); [1] call generateGifts;};
@@ -51,6 +55,7 @@ switch (SkinData) do {
 };
 
 
+// Selecciona un rifle aleatorio y busca un cargador compatible, priorizando uno trazador.
 _weaponsSize = count userRiflesListForSpawn;
 _weaponR = floor random(_weaponsSize);
 _myweapon = configName (userRiflesListForSpawn select _weaponR);
@@ -72,6 +77,7 @@ if (!isNil "_myweapon" && {_myweapon != ""}) then {
     };
 
     if (_tracerMag != "") then {
+        // Carga los cargadores antes de equipar el rifle para que aparezca listo para disparar.
         for "_i" from 1 to 7 do {
             _myhuman addMagazine [_tracerMag, 100];
         };
@@ -84,6 +90,7 @@ if (!isNil "_myweapon" && {_myweapon != ""}) then {
 };
 
 
+// Si hay pistolas disponibles, equipa una al azar y entrega dos cargadores.
 if (!isNil "userPistolsListForSpawn") then {
     _pistolSize = count userPistolsListForSpawn;
     if (_pistolSize > 0) then {
@@ -103,6 +110,7 @@ if (!isNil "userPistolsListForSpawn") then {
 };
 
 
+// Intenta guardar dos botiquines, respetando el espacio disponible en el equipo.
 for "_i" from 1 to 2 do {
     if (_myhuman canAdd "FirstAidKit") then {
         _myhuman addItemToUniform "FirstAidKit" || _myhuman addItemToVest "FirstAidKit" || _myhuman addItemToBackpack "FirstAidKit";
@@ -110,5 +118,6 @@ for "_i" from 1 to 2 do {
 };
 
 
+// Mantiene el grupo de la unidad en comportamiento seguro tras equiparla.
 _grp = group _myhuman;
 _grp setBehaviour 'SAFE';
