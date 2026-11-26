@@ -56,8 +56,6 @@ _weaponR = floor random(_weaponsSize);
 _myweapon = configName (userRiflesListForSpawn select _weaponR);
 
 if (!isNil "_myweapon" && {_myweapon != ""}) then {
-    _myhuman addWeapon _myweapon;
-    _myhuman addPrimaryWeaponItem "optic_Arco";
     _mymagazinearray = getArray (configFile >> 'CfgWeapons' >> _myweapon >> 'magazines');
     _tracerMag = "";
     {
@@ -76,6 +74,11 @@ if (!isNil "_myweapon" && {_myweapon != ""}) then {
     if (_tracerMag != "") then {
         for "_i" from 1 to 7 do {
             _myhuman addMagazine [_tracerMag, 100];
+        };
+        _myhuman addWeapon _myweapon;
+        _myhuman addPrimaryWeaponItem "optic_Arco";
+        if (_myhuman == player) then {
+            _myhuman selectWeapon _myweapon;
         };
     };
 };
